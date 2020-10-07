@@ -9,6 +9,11 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-  <h1>{% block body %}{% endblock %}</h1>
+<div>
+    <input class="top_button" type="button" onclick="location.href='home'" value="Home">
+    <input class="top_button" type="button" onclick="location.href='about'" value="About"><br>
+</div>
+{% block body %}
+{% endblock %}
 </body>
 </html>

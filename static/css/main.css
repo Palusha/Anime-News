@@ -1,3 +1,21 @@
 body {
-    background: yellowgreen;
+background: url('images/anime_background.jpg');
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+background-attachment: fixed
+}
+
+.top_button{
+display:inline-block;
+width: 5%;
+height: 40px;
+
+}
+
+#button1{
+
+}
+#button2{
+float: right;
 }
