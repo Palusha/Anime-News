@@ -1,0 +1,21 @@
+body {
+    font-family: sans-serif;
+    background-color: aqua;
+    text-align: center;
+}
+
+a {
+    font-size: 50px;
+    padding: 15px;
+}
+
+a:hover, a:active {
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(255, 126, 126);
+}
+
+a:visited, a:link {
+    text-decoration: none;
+    color: rgb(255, 126, 126);
+}
