@@ -5,14 +5,22 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link rel = "stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div>
-    <input class="top_button" type="button" onclick="location.href='home'" value="Home">
-    <input class="top_button" type="button" onclick="location.href='about'" value="About"><br>
+<div class="btn-group">
+    <button onclick="location.href='home'">Home</button>
+    <button onclick="location.href='about'">About</button>
+    <button onclick="location.href='login'">Login</button>
 </div>
+<div id="app">
+    <p>[[ message ]]</p>
+</div>
+
+<script src="{{ url_for('static', filename='vue.js') }}"></script>
 {% block body %}
 {% endblock %}
 </body>

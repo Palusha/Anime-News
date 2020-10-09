@@ -6,4 +6,10 @@ Home
 
 {% block body %}
 <h1>Hey bro, you are at home page</h1>
+    <div>
+    {% for article in articles %}
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.text }}</p>
+    {% endfor %}
+    </div>
 {% endblock %}
