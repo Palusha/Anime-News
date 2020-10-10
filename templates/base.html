@@ -7,10 +7,14 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <a href="/">Home page</a>
-    <a href="/about">About</a>
-    <a href="/signup">Sign up</a>
-    <a href="/login">Log in</a>
-    {% block body %}{% endblock %}
+        <div class="topnav">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/login">Log in</a>
+            <a href="/signup">Sign up</a>
+        </div>
+    <div id="global">
+        {% block body %}{% endblock %}
+    </div>
 </body>
 </html>

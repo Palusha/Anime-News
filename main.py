@@ -32,10 +32,15 @@ def about():
 def signup():
     if request.method == 'POST':
         lgn = request.form.get("username")
-        passw = request.form.get("password")
+        passw_one = request.form.get("password-one")
+        passw_two = request.form.get("password-two")
         print('Username:', lgn)
-        print('Password:', passw)
-        user = User(username=lgn, password=passw)
+        print('Password:', passw_one, '-', passw_two)
+        if passw_one == passw_two:
+            user = User(username=lgn, password=passw_one)
+        else:
+            print("Разные пароли!")
+            return redirect('/signup')
 
         try:
             db.session.add(user)
