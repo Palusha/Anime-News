@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block body %}
+<h1>Deleting page</h1>
+<div>
+    <form name="deleting" method="POST">
+        <table>
+           <caption>Список постов</caption>
+       <tr>
+        <th>Заголовок</th>
+        <th>Конент</th>
+       </tr>
+            {% for article in articles %}
+                <tr>
+                    <td><h2>{{ article[0] }}</h2></td>
+                    <td><h4>{{ article[1] }}</h4></td>
+                    <td><button type="submit" onclick="location.href='delete_post/{{ article[0] }}'">delete</button></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+</div>
+{% endblock %}

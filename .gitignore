@@ -1,1 +1,4 @@
-.idea/
+/.idea/
+/local/
+post.db
+/__pycache__/

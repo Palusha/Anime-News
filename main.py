@@ -1,29 +1,14 @@
 from flask import Flask, render_template, url_for, request, redirect
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import database
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-post = []
-
-
-class Article(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Article %r>' % self.id
 
 
 @app.route('/')
 @app.route('/home')
 def index():
-    articles = Article.query.order_by(Article.date.desc()).all()
-    return render_template('index.html', articles=articles)
+    return render_template('index.html', articles=database.retrieve_posts())
 
 
 @app.route('/about')
@@ -49,22 +34,21 @@ def create_article():
     if request.method == "POST":
         title = request.form.get("title")
         post_info = request.form.get("text")
-        post.append({request.form.get("title"), request.form.get("text")})
-        print(post)
-        article = Article(title=title, text=post_info)
+        database.create_post(title, post_info)
 
-        try:
-            db.session.add(article)
-            db.session.commit()
-            print('Success')
-        except:
-            print("При добавлении статьи произошла ошибка")
     return render_template('create_post.html')
 
 
-@app.route('/post/<int:post_id>')
-def show_user_profile(post_id):
-    return 'This post id is:  %d' % post_id
+@app.route('/delete_post', methods=["POST", "GET"])
+def delete_article():
+    return render_template('delete_post.html', articles=database.retrieve_posts())
+
+
+@app.route('/delete_post/<string:title>')
+def delete(title):
+    print(title)
+    database.delete_post(title)
+    return redirect("/delete_post")
 
 
 app.run(host='0.0.0.0', debug=True)
