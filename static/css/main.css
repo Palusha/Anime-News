@@ -9,6 +9,16 @@ body {
     background-attachment: fixed;
 }
 
+.greeting a
+{
+    text-decoration: none;
+    color: rgb(224, 209, 66);
+}
+
+.greeting a:hover {
+    color: rgb(255, 231, 20);
+}
+
 #global {
     background-color: rgba(66, 66, 66, 0.815);
     width: 1000px;
@@ -18,12 +28,22 @@ body {
     border-left: 10px solid #333;
     border-right: 10px solid #333;
 }
-p {
+p.greeting {
     font-size: 40px;
     margin: 50px;
 }
 
-.topnav a.active {
+.article-title {
+    font-size: 60px;
+    color: red;
+}
+
+.article-text {
+    font-size: 30px;
+    color: blue;
+}
+
+.topnav a:active {
     color: white;
   }
 
@@ -67,4 +87,37 @@ p {
     font-size: 25px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.container textarea {
+    font-family: sans-serif;
+    font-size: 25px;
+    width: 500px;
+    height: 500px;
+}
+
+.post-section {
+    font-size: 25px;
+    width: 50%;
+}
+
+.post-section table {
+    border-collapse: collapse;
+}
+
+.post-section table, td, th{
+    padding: 15px;
+    border: 2px solid white;
+}
+
+.post-section a {
+    color: rgb(255, 159, 159);
+    text-decoration: none;
+    margin: 30px;
+}
+.title {
+    font-size: 30px;
+}
+.content{
+    font-size: 15px;
 }

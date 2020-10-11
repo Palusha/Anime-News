@@ -5,5 +5,10 @@
 {% endblock %}
 
 {% block body %}
-<p>You are on the <strong>home</strong> page!</p>
+<p class="greeting">You are on the <strong>home</strong> page!</p>
+
+{% for article in articles|reverse %}
+        <h1 class="article-title">{{ article.title }}</h1>
+        <p class="article-text">{{ article.text }}</p>
+    {% endfor %}
 {% endblock %}

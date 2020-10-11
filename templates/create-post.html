@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Create post</title>
+{% endblock %}
+
+{% block body %}
+<p class="greeting">Добавление поста</h1>
+<p class="greeting">Нажмите <a href="/delete-post"><i>здесь</i></a> чтобы удалить пост</p>
+<div class="container">
+    <form method="POST">
+        <input type="text" name="title" id="title"><br>
+        <textarea name="text" id="text"></textarea><br>
+        <button type="submit">Submit</button><br>
+    </form>
+</div>
+{% endblock %}

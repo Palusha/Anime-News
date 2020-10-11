@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Delete post</title>
+{% endblock %}
+
+{% block body %}
+<div class="post-section">
+    <table>
+        <tr>
+            <th>Заголовок</th>
+            <th>Контент</th>
+            <th>ID</th>
+        </tr>
+        {% for article in articles|reverse %}
+        <tr>
+            <td class="title">{{ article.title }}</td>
+            <td class="content">{{ article.text }}</td>
+            <td class="id">{{ article.id }}</td>
+            <td><a href='/delete-post/{{ article.id }}'>delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
