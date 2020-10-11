@@ -4,11 +4,19 @@
 <title>Home Page</title>
 {% endblock %}
 
+{% block nav %}
+{% if session == 'allowed' %}
+    <a href='/create-post'>Create post!</a>
+{% else %}
+{% endif %}
+{% endblock %}
+
 {% block body %}
-<p class="greeting">You are on the <strong>home</strong> page!</p>
+<p class="greeting">Ты находишься на <strong>домашней</strong> странице!</p>
 
 {% for article in articles|reverse %}
-        <h1 class="article-title">{{ article.title }}</h1>
-        <p class="article-text">{{ article.text }}</p>
-    {% endfor %}
+<h1 class="article-title">{{ article.title }}</h1>
+<p class="article-text">{{ article.text }}</p>
+{% endfor %}
+
 {% endblock %}
