@@ -35,12 +35,10 @@ p.greeting {
 
 .article-title {
     font-size: 60px;
-    color: red;
 }
 
 .article-text {
     font-size: 30px;
-    color: blue;
 }
 
 .topnav a:active {
