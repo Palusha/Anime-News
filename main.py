@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from datetime import datetime
 
 
@@ -54,30 +54,30 @@ def signup():
     Sign up page (everything is hidden because
     signing up is not nessecery yet.
     """
-    return redirect('/login')
+    if request.method == 'POST':
 
-    # if request.method == 'POST':
-    #     # gets username and passwords from <input> on signup.html
-    #     lgn = request.form.get("username")            
-    #     passw_one = request.form.get("password-one")  
-    #     passw_two = request.form.get("password-two")  
-    #     engine = create_engine('sqlite:///users.db')
-    #     with engine.connect() as connection:
-    #         userdata = (lgn, passw)
-    #         cursor = connection.execute('SELECT * FROM users WHERE username = %s AND password = %s', userdata)
-    #         account = cursor.fetchone()
-    #         if account:
-    #             print("Пользователь", lgn, "уже существует!")
-    #             return redirect('/login')
-    #     if passw_one == passw_two:
-    #         user = User(username=lgn, password=passw_one)
-    #         db.session.add(user)  
-    #         db.session.commit()
-    #         print('Регистрация прошла успешно!')
-    #         return redirect('/login', code=302)
-    #     else:
-    #         print("Вы ввели разные пароли! Попробуйте ещё раз.")
-    #         return redirect('/signup')
+        lgn = request.form.get("username")            
+        passw_one = request.form.get("password-one")  
+        passw_two = request.form.get("password-two")  
+
+        engine = create_engine('sqlite:///users.db')
+        conn = engine.connect()
+
+        s = select([User.username]).where(User.username == lgn)
+        result = conn.execute(s)
+        account = result.fetchone()
+        if account:
+            print("Пользователь", lgn, "уже существует!")
+            return redirect('/login')
+        if passw_one == passw_two:
+            user = User(username=lgn, password=passw_one)
+            db.session.add(user)  
+            db.session.commit()
+            print('Регистрация прошла успешно!')
+            return redirect('/login', code=302)
+        else:
+            print("Вы ввели разные пароли! Попробуйте ещё раз.")
+            return redirect('/signup')
 
     return render_template('signup.html')
 
@@ -88,21 +88,29 @@ def login():
     if 'loggedin' in session:
         return redirect('/create-post')
     if request.method == 'POST':
-        # gets username and password from <input> on login.html
         lgn = request.form.get("username")
         passw = request.form.get("password")
+        
+        engine = create_engine('sqlite:///users.db')
+        conn = engine.connect()
 
-        user = User.query.filter_by(username=lgn).first()
-        # for username and password "admin" moves to create-post.html
+        s = select([User.username, User.password]).where(User.username == lgn)
+        result = conn.execute(s)
+        user = result.fetchone()
+
         if passw == 'admin' and lgn == 'admin':  
             print("Вы ввошли как Администратор")
             session['loggedin'] = True
             return redirect('/create-post', code=302)
-        # elif passw == user.password:
-        #     print('Вы успешно ввошли в аккаунт!')
-        #     return redirect('/')
-        # print("Пользователя", lgn, "не существует!")
-        # return redirect('/login')
+        elif user:
+            if passw == user.password:
+                print('Вы успешно ввошли в аккаунт!')
+                return redirect('/')
+            else:
+                print('Вы ввели неверный пароль!')
+                return redirect('/login')
+        print("Пользователя", lgn, "не существует!")
+        return redirect('/login')
 
     return render_template('login.html')
 
@@ -125,7 +133,6 @@ def create_article():
         time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
         new_post = Article(title=title, text=post_info, date=time)
 
-        # adds created article to the posts.db
         db.session.add(new_post)
         db.session.commit()
 
@@ -144,12 +151,18 @@ def delete_post():
 def delete(id):
     if 'loggedin' not in session:
         return redirect('/')
-    # clicking on the link deletes an article by it's id
     db.session.query(Article).filter(Article.id == id).delete()
     db.session.commit()
     return redirect("/delete-post")
 
+@app.route('/post/<int:id>')
+def show_post(id):
+    engine = create_engine('sqlite:///posts.db')
+    conn = engine.connect()
+    s = select([Article.title, Article.text]).where(Article.id == id)
+    result = conn.execute(s)
+    article = result.fetchone()
+    return render_template("post.html", title=article.title, text=article.text)
+
 if __name__ == "__main__":
-    # runs the app in the debug mode (should be turned off)
-    # and allows people in LAN connect to the website
     app.run(debug=True, host='0.0.0.0')
