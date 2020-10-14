@@ -1,67 +1,41 @@
-from flask import Flask, render_template, request, redirect, session
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, select
+from flask import Blueprint, render_template, request, redirect, session
+from sqlalchemy import select
 from datetime import datetime
 
 
-app = Flask(__name__)
-# configuration (location) of the FIRST database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-# binds keys to the rest of the databases (there is only one named 'posts.db')
-app.secret_key = 'xyipizda'
-app.config['SQLALCHEMY_BINDS'] = {'posts': 'sqlite:///posts.db'}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+auth = Blueprint('auth', __name__,
+                        template_folder='templates')
 
-# model for users.db
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(25), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+# code below should be exactly here after the creating Blueprint (above)
+from models import User, Article, db
+from app import user_engine, posts_engine # importing created engines from app.py
 
-    def __repr__(self):
-        return 'User %r' % self.id
-
-# model for posts.db
-class Article(db.Model):
-    __bind_key__ = 'posts' # <-- binded key
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(30), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.String, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Article %r>' % self.id
-
-
-@app.route('/')
-@app.route('/home')
+@auth.route('/')
+@auth.route('/home')
 def index():
     """ Home page """
     return render_template('index.html', articles=Article.query.all())
 
 
-@app.route('/about/')
+@auth.route('/about/')
 def about():
     """ About page """
     return render_template('about.html')
 
-@app.route('/signup', methods=['POST', 'GET'])
+@auth.route('/signup', methods=['POST', 'GET'])
 def signup():
     """ 
-    Sign up page (everything is hidden because
-    signing up is not nessecery yet.
+    Sign up page
     """
+    if 'loggedin' in session:
+        return redirect('/create-post')
     if request.method == 'POST':
 
         lgn = request.form.get("username")            
         passw_one = request.form.get("password-one")  
         passw_two = request.form.get("password-two")  
 
-        engine = create_engine('sqlite:///users.db')
-        conn = engine.connect()
+        conn = user_engine.connect() # connects to the created engine in app.py
 
         s = select([User.username]).where(User.username == lgn)
         result = conn.execute(s)
@@ -82,7 +56,7 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/login', methods=['POST', 'GET'])
+@auth.route('/login', methods=['POST', 'GET'])
 def login():
     """ Log in page """
     if 'loggedin' in session:
@@ -91,8 +65,7 @@ def login():
         lgn = request.form.get("username")
         passw = request.form.get("password")
         
-        engine = create_engine('sqlite:///users.db')
-        conn = engine.connect()
+        conn = user_engine.connect() # connects to the created engine in app.py
 
         s = select([User.username, User.password]).where(User.username == lgn)
         result = conn.execute(s)
@@ -105,6 +78,7 @@ def login():
         elif user:
             if passw == user.password:
                 print('Вы успешно ввошли в аккаунт!')
+                session['loggedin'] = True
                 return redirect('/')
             else:
                 print('Вы ввели неверный пароль!')
@@ -114,7 +88,7 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/logout')
+@auth.route('/logout')
 def logout():
    session.pop('loggedin', None)
    session.pop('id', None)
@@ -122,7 +96,7 @@ def logout():
    return redirect('/')
 
 
-@app.route('/create-post/', methods=['POST', 'GET'])
+@auth.route('/create-post/', methods=['POST', 'GET'])
 def create_article():
     """ Create article page """
     if 'loggedin' not in session:
@@ -130,7 +104,7 @@ def create_article():
     if request.method == "POST":
         title = request.form.get("title")
         post_info = request.form.get("text")
-        time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+        time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S") # deletes miliseconds from the date
         new_post = Article(title=title, text=post_info, date=time)
 
         db.session.add(new_post)
@@ -139,7 +113,7 @@ def create_article():
     return render_template('create-post.html')
 
 
-@app.route('/delete-post/', methods=['POST', 'GET'])
+@auth.route('/delete-post/', methods=['POST', 'GET'])
 def delete_post():
     """ Delete article page """
     if 'loggedin' not in session:
@@ -147,7 +121,7 @@ def delete_post():
     return render_template('delete-post.html', articles=Article.query.all())
 
 
-@app.route('/delete-post/<int:id>')
+@auth.route('/delete-post/<int:id>')
 def delete(id):
     if 'loggedin' not in session:
         return redirect('/')
@@ -155,14 +129,11 @@ def delete(id):
     db.session.commit()
     return redirect("/delete-post")
 
-@app.route('/post/<int:id>')
+@auth.route('/post/<int:id>')
 def show_post(id):
-    engine = create_engine('sqlite:///posts.db')
-    conn = engine.connect()
+    conn = posts_engine.connect() # connects to the created engine in app.py
+
     s = select([Article.title, Article.text]).where(Article.id == id)
     result = conn.execute(s)
     article = result.fetchone()
     return render_template("post.html", title=article.title, text=article.text)
-
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
