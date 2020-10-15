@@ -7,6 +7,7 @@ CREATE_TABLE = "CREATE TABLE IF NOT EXISTS posts (" \
 
 CREATE_POST = "INSERT INTO posts VALUES(null, ?, ?, ?)"
 RETRIEVE_POSTS = "SELECT * FROM posts"
+RETRIEVE_POST = "SELECT * FROM posts WHERE id_ = ?"
 
 
 def create_tables():
@@ -17,6 +18,13 @@ def create_tables():
 def create_post(date, title, content):
     with sqlite3.connect("post.db") as connection:
         connection.execute(CREATE_POST, (date, title, content))
+
+
+def show_post(id_):
+    with sqlite3.connect("post.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute(RETRIEVE_POST, (id_,))
+        return cursor.fetchall()
 
 
 def retrieve_posts():

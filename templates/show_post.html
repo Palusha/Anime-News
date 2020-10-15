@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post page
+{% endblock %}
+
+{% block body %}
+<article>
+	<div class="center">
+		<h1>{{ article[0][2] }}</h1>
+	</div>
+	<h3>{{ article[0][3] }}</h3>
+</article>
+{% endblock %}

@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-About us
+Post creating
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1>Добавление поста</h1>
-    <div class="container">
+<div class="create_post" id="add-blog">
+    <h2>Добавление поста</h2>
         <form method="POST">
-            <input type="text" name="title" id="title"><br>
-            <textarea name="text" id="text"></textarea><br>
-            <button type="submit">Submit</button>
+        	<label>Заголовок:</label>
+            <input type="text" name="title" id="title" required/>
+            <label>Контент:</label>
+            <textarea name="text" id="text" required></textarea>
+            <button type="submit">Створити пост</button>
         </form>
-    </div>
 </div>
 <a href="delete_post">Delete post</a>
 {% endblock %}

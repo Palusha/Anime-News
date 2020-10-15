@@ -5,11 +5,12 @@ Home
 {% endblock %}
 
 {% block body %}
-<h1>Hey bro, you are at home page</h1>
-    <div>
+<article>
+	<h1>Hey bro, you are at home page</h1>
     {% for article in articles %}
-        <h1>{{ article[2] }}</h1>
+        <h1><a href="/post/{{ article[0] }}">{{ article[2] }}</a></h1>
         <p>{{ article[3] }}</p>
     {% endfor %}
     </div>
+</article>
 {% endblock %}

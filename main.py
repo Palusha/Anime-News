@@ -1,7 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from datetime import datetime
 import database
-import time
 
 app = Flask(__name__)
 app.secret_key = 'SOME SECRET'
@@ -38,6 +37,11 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect('/login')
+
+
+@app.route('/post/<int:id_>')
+def show_post(id_):
+    return render_template('show_post.html', article=database.show_post(id_))
 
 
 @app.route('/create-post', methods=["POST", "GET"])

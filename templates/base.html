@@ -11,18 +11,16 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div class="btn-group">
-    <button onclick="location.href='home'">Home</button>
-    <button onclick="location.href='about'">About</button>
-    <button onclick="location.href='login'">Login</button>
-    <button onclick="location.href='logout'">Logout</button>
+<div class="button_line">
+    <a class="button" href="/home">Home</a>
+    <a class="button" href="/about">About</a>
+    <a class="button" href="/login">Login</a>
+    <a class="button" href="/logout">Logout</a>
 </div>
-<div id="app">
-    <p>[[ message ]]</p>
-</div>
-
 <script src="{{ url_for('static', filename='vue.js') }}"></script>
+<div class="card">
 {% block body %}
 {% endblock %}
+</div>
 </body>
 </html>

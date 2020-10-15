@@ -7,17 +7,15 @@ About us
 {% block body %}
 <h1>Login page</h1>
 <div>
-    <form method="POST">
-        <div class="container">
-            <label for="password"><b>Username</b></label>
+    <div>
+        <form method="POST">
+			<label for="username"><b>Username</b></label>
             <input type="text" placeholder="username" name="username" required>
-
             <label for="password"><b>Password</b></label>
             <input type="password" placeholder="password" name="password" required>
-
             <button type="submit">Login</button>
-        </div>
-    </form>
+        </form>
+	</div>
 </div>
 
 {% endblock %}

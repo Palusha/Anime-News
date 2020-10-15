@@ -1,36 +1,79 @@
 body {
-/*background: url('images/anime_background.jpg');*/
-/*background-repeat: no-repeat;*/
-/*background-position: center;*/
-/*background-size: cover;*/
-/*background-attachment: fixed*/
+	font-family: tahoma;
+	line-height: 1.5;
+	background: url('../images/anime_background.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-attachment: fixed
 }
 
-.btn-group button{
-background-color: #4CAF50;
-border: 0 solid green;
-color: white;
-cursor: pointer;
-display:inline-block;
-width: 5%;
-float: left;
-height: 40px;
-}
-
-.btn-group button:not(:last-child) {
-border-right: none;
-}
-
-.btn-group:after {
-content: "";
-clear: both;
-display: table;
-}
-
-.btn-group button:hover {
-background-color: #3e8e41;
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 .container {
   padding: 16px;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.card{
+	width: 800px;
+	height: 100%;
+	margin: 0 auto;
+	padding: 20px;
+	color: black;
+
+	background: rgba(250, 255, 253, 0.9)
+}
+
+#add-blog *{
+	box-sizing: border-box;
+}
+
+#add-blog {
+	margin: 20px auto;
+	max-width: 600px;
+}
+
+label{
+	display: block;
+	margin: 20px 0 10px;
+}
+
+.create_post input[type="text"], textarea{
+	display: block;
+	width: 100%;
+	padding: 8px;
+}
+
+.create_post textarea{
+	height: 180px;
+}
+
+.center{
+	text-align: center;
+	margin: 0 auto;
+}
+.button_line{
+    width:100%;
+    text-align: center;
+    background: rgba(78, 156, 175, 0.9)
+}
+
+.button {
+    display: inline-block;
+    width: 115px;
+    height: 25px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    line-height: 25px;
+    background: 
 }
