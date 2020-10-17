@@ -77,3 +77,8 @@ label{
     line-height: 25px;
     background: 
 }
+
+div {
+   word-wrap: break-word;
+   width: 100%;
+}

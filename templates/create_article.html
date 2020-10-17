@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post creating
+{% endblock %}
+
+{% block body %}
+<div class="create_post" id="add-blog">
+    <h2>Добавление поста</h2>
+        <form method="POST">
+        	<label>Заголовок:</label>
+            <input type="text" name="title" id="title" required/>
+            <label>Контент:</label>
+            <textarea name="text" id="text" required></textarea>
+            <button type="submit">Створити пост</button>
+        </form>
+</div>
+{% endblock %}

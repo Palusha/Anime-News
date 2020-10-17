@@ -2,11 +2,11 @@ import sqlite3
 
 
 CREATE_TABLE = "CREATE TABLE IF NOT EXISTS posts (" \
-               "id_ INTEGER PRIMARY KEY AUTOINCREMENT," \
+               "id_ INTEGER(1000) PRIMARY KEY AUTOINCREMENT," \
                "date TEXT, title TEXT, content TEXT)"
 
 CREATE_POST = "INSERT INTO posts VALUES(null, ?, ?, ?)"
-RETRIEVE_POSTS = "SELECT * FROM posts"
+RETRIEVE_POSTS = "SELECT * FROM posts ORDER BY date DESC"
 RETRIEVE_POST = "SELECT * FROM posts WHERE id_ = ?"
 
 
@@ -24,7 +24,7 @@ def show_post(id_):
     with sqlite3.connect("post.db") as connection:
         cursor = connection.cursor()
         cursor.execute(RETRIEVE_POST, (id_,))
-        return cursor.fetchall()
+        return cursor.fetchone()
 
 
 def retrieve_posts():
@@ -39,4 +39,13 @@ def delete_post(post_id):
         cursor = connection.cursor()
         sql_delete_query = """DELETE from posts where id_ = ?"""
         cursor.execute(sql_delete_query, (post_id,))
+        connection.commit()
+
+
+def update_post(post_id, title, content):
+    with sqlite3.connect("post.db") as connection:
+        cursor = connection.cursor()
+        sql_update_query = """Update posts set title = ?, content = ? where id_ = ?"""
+        data = (title, content, post_id)
+        cursor.execute(sql_update_query, data)
         connection.commit()
