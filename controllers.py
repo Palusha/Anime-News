@@ -34,12 +34,13 @@ def signup():
         passw_one = request.form.get("password-one")  
         passw_two = request.form.get("password-two")  
 
-        user = User.query.filter_by(username=lgn)
+        user = User.query.filter_by(username=lgn).first()
         if user:
             print("Пользователь", lgn, "уже существует!")
             return redirect('/login')
         if passw_one == passw_two:
-            db.session.add(user)  
+            new_user = User(username=lgn, password=passw_one)
+            db.session.add(new_user)  
             db.session.commit()
             print('Регистрация прошла успешно!')
             return redirect('/login', code=302)
@@ -59,7 +60,7 @@ def login():
         lgn = request.form.get("username")
         passw = request.form.get("password")
 
-        user = User.query.filter_by(username=lgn)
+        user = User.query.filter_by(username=lgn).first()
         if passw == 'admin' and lgn == 'admin':  
             print("Вы ввошли как Администратор")
             session['loggedin'] = True
