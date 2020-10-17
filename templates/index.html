@@ -15,8 +15,8 @@
 <p class="greeting">Ты находишься на <strong>домашней</strong> странице!</p>
 
 {% for article in articles|reverse %}
-<a href="/post/{{ article.id }}" class="article-title">{{ article.title }}</a>
-<p class="article-text">{{ article.text }}</p>
+<h1 class="main-page-article"><a href="/post/{{ article.id }}">{{ article.title }}</a></h1>
+<p class="main-page-article">{{ article.text[0:70] }}... <a href="/post/{{ article.id }}">(читать дальше)</a></p>
 {% endfor %}
 
 {% endblock %}

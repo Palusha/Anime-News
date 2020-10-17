@@ -1,5 +1,6 @@
 posts.db
-.vscode
+comments.db
 users.db
+.vscode
 local
 static/css/images

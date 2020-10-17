@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Edit post</title>
+{% endblock %}
+
+{% block body %}
+<p class="greeting">Вы в режиме редактора</h1>
+<p class="greeting"><a href="/delete-post/{{ article.id }}"><i>УДАЛИТЬ ПОСТ</i></a></p>
+<div class="container">
+    <form method="POST">
+        <input type="text" name="title" id="title" value='{{ article.title }}'><br>
+        <textarea name="text" id="text">{{ article.text }}</textarea><br>
+        <button type="submit">Submit</button><br>
+    </form>
+</div>
+{% endblock %}

@@ -2,11 +2,27 @@ body {
     font-family: sans-serif;
     color: white;
     text-align: center;
-    background-image: url('images/anime_background.jpg');
+    background-image: url('images/background.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
+}
+
+.article-info {
+    word-wrap: break-word;
+    width: 100%;
+}
+
+.article-info h1 {
+    margin: 50px;
+    font-size: 60px;
+}
+
+.article-info p {
+    font-size: 25px;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 .greeting a
@@ -33,12 +49,14 @@ p.greeting {
     margin: 50px;
 }
 
-.article-title {
-    font-size: 60px;
+h1.main-page-article {
+    font-size: 40px;
+    margin: 15px;
 }
 
-.article-text {
-    font-size: 30px;
+.main-page-article {
+    word-wrap: break-word;
+    width: 100%;
 }
 
 .topnav a:active {

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Post</title>
+{% endblock %}
+
+{% block body %}
+
+<div class='article-info'>
+    <h1>{{ article.title }}</h1>
+    <p>{{ article.text }}</p>   
+</div>
+<div class='comment-section'>
+    <div class='comments'>
+        {% for comment in comments %}
+        <br>
+            {{ comment.id }}
+        <br>
+            {{ comment.text }}
+        <br>
+            {{ comment.date }}
+        <br>
+        {% endfor %}
+    </div>
+    <div class='comment-form'>
+        <form method="POST">
+            <textarea name="text" id="text"></textarea><br>
+            <button type="submit">Submit</button><br>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

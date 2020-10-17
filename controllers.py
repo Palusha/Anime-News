@@ -7,11 +7,10 @@ auth = Blueprint('auth', __name__,
                         template_folder='templates')
 
 # code below should be exactly here after the creating Blueprint (above)
-from models import User, Article, db
-from app import user_engine, posts_engine # importing created engines from app.py
+from models import User, Article, Comment, db
+
 
 @auth.route('/')
-@auth.route('/home')
 def index():
     """ Home page """
     return render_template('index.html', articles=Article.query.all())
@@ -35,16 +34,11 @@ def signup():
         passw_one = request.form.get("password-one")  
         passw_two = request.form.get("password-two")  
 
-        conn = user_engine.connect() # connects to the created engine in app.py
-
-        s = select([User.username]).where(User.username == lgn)
-        result = conn.execute(s)
-        account = result.fetchone()
-        if account:
+        user = User.query.filter_by(username=lgn)
+        if user:
             print("Пользователь", lgn, "уже существует!")
             return redirect('/login')
         if passw_one == passw_two:
-            user = User(username=lgn, password=passw_one)
             db.session.add(user)  
             db.session.commit()
             print('Регистрация прошла успешно!')
@@ -53,7 +47,7 @@ def signup():
             print("Вы ввели разные пароли! Попробуйте ещё раз.")
             return redirect('/signup')
 
-    return render_template('signup.html')
+    return render_template('users-auth/signup.html')
 
 
 @auth.route('/login', methods=['POST', 'GET'])
@@ -64,18 +58,13 @@ def login():
     if request.method == 'POST':
         lgn = request.form.get("username")
         passw = request.form.get("password")
-        
-        conn = user_engine.connect() # connects to the created engine in app.py
 
-        s = select([User.username, User.password]).where(User.username == lgn)
-        result = conn.execute(s)
-        user = result.fetchone()
-
+        user = User.query.filter_by(username=lgn)
         if passw == 'admin' and lgn == 'admin':  
             print("Вы ввошли как Администратор")
             session['loggedin'] = True
             return redirect('/create-post', code=302)
-        elif user:
+        if user:
             if passw == user.password:
                 print('Вы успешно ввошли в аккаунт!')
                 session['loggedin'] = True
@@ -86,7 +75,7 @@ def login():
         print("Пользователя", lgn, "не существует!")
         return redirect('/login')
 
-    return render_template('login.html')
+    return render_template('users-auth/login.html')
 
 @auth.route('/logout')
 def logout():
@@ -110,7 +99,7 @@ def create_article():
         db.session.add(new_post)
         db.session.commit()
 
-    return render_template('create-post.html')
+    return render_template('posts/create-post.html')
 
 
 @auth.route('/delete-post/', methods=['POST', 'GET'])
@@ -118,7 +107,7 @@ def delete_post():
     """ Delete article page """
     if 'loggedin' not in session:
         return redirect('/')
-    return render_template('delete-post.html', articles=Article.query.all())
+    return render_template('posts/delete-post.html', articles=Article.query.all())
 
 
 @auth.route('/delete-post/<int:id>')
@@ -126,14 +115,41 @@ def delete(id):
     if 'loggedin' not in session:
         return redirect('/')
     db.session.query(Article).filter(Article.id == id).delete()
+    # db.session.query(Comment).filter(Comment.article_id == id).delete()
     db.session.commit()
     return redirect("/delete-post")
 
-@auth.route('/post/<int:id>')
-def show_post(id):
-    conn = posts_engine.connect() # connects to the created engine in app.py
+@auth.route('/edit-post/<int:id>', methods=['POST', 'GET'])
+def edit(id):
+    if 'loggedin' not in session:
+        return redirect('/')
+    article = Article.query.filter_by(id=id).first()
 
-    s = select([Article.title, Article.text]).where(Article.id == id)
-    result = conn.execute(s)
-    article = result.fetchone()
-    return render_template("post.html", title=article.title, text=article.text)
+    if request.method == 'POST':
+        new_title = request.form.get("title")
+        new_text = request.form.get("text")
+
+        if new_title == article.title and new_text == article.text:
+            print('Вы ничего не изменили!')
+            return redirect('/edit-post/' + str(id))
+
+        article.title = new_title
+        article.text = new_text
+        db.session.commit()
+
+    return render_template('posts/edit-post.html', article=article)
+
+
+@auth.route('/post/<int:id>', methods=['POST', 'GET'])
+def show_post(id):
+    article = Article.query.filter_by(id=id).first()
+    comments = Comment.query.filter_by(article_id=id)
+    if request.method == 'POST':
+        comm_text = request.form.get('text')
+        new_comment = Comment(text=comm_text, article_id=id)
+
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect('/post/' + str(id))
+    return render_template("posts/post.html", article=article, comments=comments)
+

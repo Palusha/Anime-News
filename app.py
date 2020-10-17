@@ -7,12 +7,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.secret_key = 'this_definetly_has_to_be_changed'
 # allows to connect to the second database with articles
-app.config['SQLALCHEMY_BINDS'] = {'posts': 'sqlite:///posts.db'} # bind key is used in models.py
+app.config['SQLALCHEMY_BINDS'] = {'posts': 'sqlite:///posts.db', 'comments' : 'sqlite:///comments.db'} # bind key is used in models.py
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-posts_engine = create_engine('sqlite:///posts.db')
-user_engine = create_engine('sqlite:///users.db')
 
 # code below should be exactly here after app and db creating
 from controllers import auth
