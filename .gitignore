@@ -1,6 +1,8 @@
-posts.db
-comments.db
-users.db
 .vscode
+__pycache__/
 local
+
+app/databases
 static/css/images
+
+config.py

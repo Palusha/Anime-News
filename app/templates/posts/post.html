@@ -14,12 +14,15 @@
     <div class='comments'>
         {% for comment in comments %}
         <br>
+            {{ comment.user_id }}
+        <br>
             {{ comment.id }}
         <br>
             {{ comment.text }}
         <br>
             {{ comment.date }}
         <br>
+            <a href="/delete-comment/{{ comment.id }}">Delete comment</a>
         {% endfor %}
     </div>
     <div class='comment-form'>
