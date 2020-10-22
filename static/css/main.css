@@ -24,7 +24,7 @@ a {
 
 .card{
 	width: 800px;
-	height: 100%;
+	min-height: 100%;
 	margin: 0 auto;
 	padding: 20px;
 	color: black;
@@ -61,12 +61,14 @@ label{
 	margin: 0 auto;
 }
 .button_line{
+	margin: 0;
     width:100%;
     text-align: center;
     background: rgba(78, 156, 175, 0.9)
 }
 
 .button {
+	margin: 0;
     display: inline-block;
     width: 115px;
     height: 25px;

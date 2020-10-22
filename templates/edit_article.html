@@ -9,11 +9,10 @@ Post creating
     <h2>Добавление поста</h2>
         <form method="POST">
         	<label>Заголовок:</label>
-            <input type="text" value = {{ article[2] }} name="title" id="title" required autofocus/>
+            <input type="text" value = "{{ article[2] }}" name="title" id="title" required autofocus/>
             <label>Контент:</label>
             <textarea name="text" id="text" required autofocus>{{ article[3] }}</textarea>
             <button type="submit">Save</button>
         </form>
 </div>
-<a href="/edit_articles">Edit posts</a>
 {% endblock %}

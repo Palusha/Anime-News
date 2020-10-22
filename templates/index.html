@@ -10,7 +10,14 @@ Home
     {% for article in articles %}
         <h1><a href="/article/{{ article[0] }}">{{ article[2] }}</a></h1>
         <p>{{ article[3] }}</p>
+        <p>{{ article[4] }}</p>
     {% endfor %}
-    </div>
 </article>
+{% if pages > 2 %}
+<div class="page_numbers">
+{% for page in range(1, pages + 1) %}
+	<a href="/home?page={{ page }}">{{ page }}</a>
+{% endfor %}
+</div>
+{% endif %}
 {% endblock %}

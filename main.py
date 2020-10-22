@@ -16,10 +16,14 @@ def check_login(func):
     return wrap
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/', methods=['GET'])
+@app.route('/home', methods=['GET'])
 def index():
-    return render_template('index.html', articles=database.retrieve_posts())
+    page = request.args.get('page', default=1, type=int)
+    page_count = database.count_articles() // database.pag + (database.count_articles() % database.pag > 0)
+    if page <= 0 or page > page_count:
+        return redirect("/home")
+    return render_template('index.html', articles=database.pagination(page), pages=page_count)
 
 
 @app.route('/about')
@@ -61,7 +65,7 @@ def create_article():
     if request.method == "POST":
         title = request.form.get("title")
         post_info = request.form.get("text")
-        database.create_post(datetime.now().strftime("%d.%m.%Y %H:%M"), title, post_info)
+        database.create_post(datetime.now().strftime("%d.%m.%Y %H:%M:%S"), title, post_info)
 
     return render_template('create_article.html')
 

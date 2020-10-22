@@ -8,6 +8,9 @@ CREATE_TABLE = "CREATE TABLE IF NOT EXISTS posts (" \
 CREATE_POST = "INSERT INTO posts VALUES(null, ?, ?, ?)"
 RETRIEVE_POSTS = "SELECT * FROM posts ORDER BY date DESC"
 RETRIEVE_POST = "SELECT * FROM posts WHERE id_ = ?"
+PAGINATION = "SELECT * FROM posts ORDER BY date DESC LIMIT 5 OFFSET ?"
+COUNT_ARTICLES = "SELECT COUNT(*) FROM posts"
+pag = 5
 
 
 def create_tables():
@@ -34,6 +37,13 @@ def retrieve_posts():
         return cursor.fetchall()
 
 
+def pagination(page: int):
+    with sqlite3.connect("post.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute(PAGINATION, str(page * pag - pag))
+        return cursor.fetchall()
+
+
 def delete_post(post_id):
     with sqlite3.connect("post.db") as connection:
         cursor = connection.cursor()
@@ -49,3 +59,10 @@ def update_post(post_id, title, content):
         data = (title, content, post_id)
         cursor.execute(sql_update_query, data)
         connection.commit()
+
+
+def count_articles():
+    with sqlite3.connect("post.db") as connection:
+        cursor = connection.cursor()
+        cursor.execute(COUNT_ARTICLES)
+        return cursor.fetchone()[0]

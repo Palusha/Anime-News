@@ -11,19 +11,21 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-<div class="button_line">
-    <div class="top_buttons">
-        <a class="button" href="/home">Home</a>
-        <a class="button" href="/about">About</a>
-        {% if session.logged_in %}
-            <a class="button" href="/create_article">Create</a>
-            <a class="button" href="/edit_articles">Edit</a>
-            <a class="button" href="/logout">Logout</a>
-        {% else %}
-            <a class="button" href="/login">Login</a>
-        {% endif %}
+<header>
+    <div class="button_line">
+        <div class="top_buttons">
+            <a class="button" href="/home">Home</a>
+            <a class="button" href="/about">About</a>
+            {% if session.logged_in %}
+                <a class="button" href="/create_article">Create</a>
+                <a class="button" href="/edit_articles">Edit</a>
+                <a class="button" href="/logout">Logout</a>
+            {% else %}
+                <a class="button" href="/login">Login</a>
+            {% endif %}
+        </div>
     </div>
-</div>
+</header>
 <script src="{{ url_for('static', filename='vue.js') }}"></script>
 <div class="card">
 {% block body %}
