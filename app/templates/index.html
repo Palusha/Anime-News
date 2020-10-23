@@ -4,13 +4,6 @@
 <title>Home Page</title>
 {% endblock %}
 
-{% block nav %}
-{% if session == 'allowed' %}
-    <a href='/create-post'>Create post!</a>
-{% else %}
-{% endif %}
-{% endblock %}
-
 {% block body %}
 <p class="greeting">Ты находишься на <strong>домашней</strong> странице!</p>
 
@@ -18,5 +11,4 @@
 <h1 class="main-page-article"><a href="/post/{{ article.id }}">{{ article.title }}</a></h1>
 <p class="main-page-article">{{ article.text[0:70] }}... <a href="/post/{{ article.id }}">(читать дальше)</a></p>
 {% endfor %}
-
 {% endblock %}

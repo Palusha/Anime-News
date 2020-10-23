@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Profille</title>
+{% endblock %}
+
+{% block body %}
+<p class="greeting">Твій профіль</p>
+
+<img src="{{ current_user.avatar }}">
+<p>Логін: {{ current_user.username }}</p>
+<p>Дата створення аккаунта: {{ current_user.date.strftime("%H:%M, %b %d %Y") }}</p>
+<p>Пароль: {{ current_user.password }} ( ВИДАЛИТИ ) </p>
+
+{% endblock %}

@@ -12,21 +12,20 @@
 </div>
 <div class='comment-section'>
     <div class='comments'>
-        {% for comment in comments %}
+        {% for comment in article.comments %}
         <br>
-            {{ comment.user_id }}
-        <br>
-            {{ comment.id }}
+            <img style="width: 32px" src="{{ comment.user.avatar }}">
+            {{ comment.user.username }}
         <br>
             {{ comment.text }}
         <br>
-            {{ comment.date }}
+            {{ comment.date.strftime("%H:%M, %b %d %Y") }}
         <br>
             <a href="/delete-comment/{{ comment.id }}">Delete comment</a>
         {% endfor %}
     </div>
     <div class='comment-form'>
-        <form method="POST">
+        <form method="POST" action="/create-comment/{{ article.id }}">
             <textarea name="text" id="text"></textarea><br>
             <button type="submit">Submit</button><br>
         </form>

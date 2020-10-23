@@ -41,7 +41,7 @@ def signup():
             print("Пользователь", lgn, "уже существует!")
             return redirect('/login')
         if passw_one == passw_two:
-            new_user = User(username=lgn, password=passw_one)
+            new_user = User(username=lgn, password=passw_one, avatar=User.create_avatar(lgn, 512))
             db.session.add(new_user)  
             db.session.commit()
             print('Регистрация прошла успешно!')
@@ -57,7 +57,7 @@ def signup():
 def login():
     """ Log in page """
     if current_user.is_authenticated:
-        redirect('/')
+        return redirect('/')
     if request.method == 'POST':
         lgn = request.form.get("username")
         passw = request.form.get("password")
@@ -76,6 +76,11 @@ def login():
 
     return render_template('users-auth/login.html')
 
+@auth.route('/profile/')
+@login_required
+def show_profile():
+    return render_template('users-auth/profile.html', user_data=current_user)
+
 @auth.route('/logout')
 @login_required
 def logout():
@@ -90,8 +95,7 @@ def create_article():
     if request.method == "POST":
         title = request.form.get("title")
         post_info = request.form.get("text")
-        time = datetime.now().strftime("%d/%m/%Y, %H:%M:%S") # deletes miliseconds from the date
-        new_post = Article(title=title, text=post_info, date=time)
+        new_post = Article(title=title, text=post_info)
 
         db.session.add(new_post)
         db.session.commit()
@@ -110,8 +114,9 @@ def show_article_table():
 @login_required
 def delete_article(id):
     db.session.query(Article).filter(Article.id == id).delete()
+    db.session.query(Comment).filter(Comment.article_id == id).delete()
     db.session.commit()
-    return redirect("/delete-post")
+    return redirect("/article-table")
 
 @auth.route('/edit-post/<int:id>', methods=['POST', 'GET'])
 @login_required
@@ -134,16 +139,21 @@ def edit(id):
 
 
 @auth.route('/post/<int:id>', methods=['POST', 'GET'])
-def show_post_and_create_comment(id):
-    article = Article.query.filter_by(id=id).first()
-    comments = Comment.query.filter_by(article_id=id)
-    if request.method == 'POST' and current_user.is_authenticated:
-        comm_text = request.form.get('text')
-        new_comment = Comment(text=comm_text, article_id=id, user_id=current_user.id)
-        db.session.add(new_comment)
-        db.session.commit()
-        return redirect('/post/' + str(id))
-    return render_template("posts/post.html", article=article, comments=comments)
+def show_post(id):
+    article = Article.query.filter_by(id=id).first_or_404()
+    users = User.query.all()
+    return render_template("posts/post.html", article=article, users=users)
+
+
+@auth.route('/create-comment/<int:id>', methods=['POST', 'GET'])
+@login_required
+def create_comment(id):
+    comm_text = request.form.get('text')
+    new_comment = Comment(text=comm_text, article_id=id, user_id=current_user.id)
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect('/post/' + str(id))
+
 
 @auth.route('/delete-comment/<int:id>')
 @login_required

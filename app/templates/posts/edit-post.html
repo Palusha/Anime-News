@@ -6,7 +6,7 @@
 
 {% block body %}
 <p class="greeting">Вы в режиме редактора</h1>
-<p class="greeting"><a href="/delete-post/{{ article.id }}"><i>УДАЛИТЬ ПОСТ</i></a></p>
+<p class="greeting"><a href="/delete-article/{{ article.id }}"><i>УДАЛИТЬ ПОСТ</i></a></p>
 <div class="container">
     <form method="POST">
         <input type="text" name="title" id="title" value='{{ article.title }}'><br>
