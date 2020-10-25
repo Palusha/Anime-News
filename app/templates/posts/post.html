@@ -8,6 +8,14 @@
 
 <div class='article-info'>
     <h1>{{ article.title }}</h1>
+    Автор статті: <a href="/profile/{{ article.user.username }}">{{ article.user.username }}</a>
+    <br>
+    Дата створення статті: {{ article.date.strftime("%H:%M, %b %d %Y") }}
+    <br>
+    {% if article.last_update %}
+    Останньо оновлено: {{ article.last_update.strftime("%H:%M, %b %d %Y") }}
+    <br>
+    {% endif %}
     <p>{{ article.text }}</p>   
 </div>
 <div class='comment-section'>
@@ -15,7 +23,7 @@
         {% for comment in article.comments %}
         <br>
             <img style="width: 32px" src="{{ comment.user.avatar }}">
-            {{ comment.user.username }}
+            <a href="/profile/{{ comment.user.username }}">{{ comment.user.username }}</a>
         <br>
             {{ comment.text }}
         <br>
@@ -24,12 +32,16 @@
             <a href="/delete-comment/{{ comment.id }}">Delete comment</a>
         {% endfor %}
     </div>
+    {% if current_user.is_authenticated %}
     <div class='comment-form'>
         <form method="POST" action="/create-comment/{{ article.id }}">
             <textarea name="text" id="text"></textarea><br>
             <button type="submit">Submit</button><br>
         </form>
     </div>
+    {% else %}
+    <p>Чтобы оставить комментарий вам нужно ввойти в аккаунт.</p>
+    {% endif %}
 </div>
 
 

@@ -5,11 +5,32 @@
 {% endblock %}
 
 {% block body %}
-<p class="greeting">Твій профіль</p>
-
-<img src="{{ current_user.avatar }}">
-<p>Логін: {{ current_user.username }}</p>
+<p class="greeting">Профіль користувача {{ user.username }}</p>
+{% if user.username == current_user.username %}
+<a href="">Редагувати профіль</a>
+<br>
+{% endif %}
+<hr>
+<img src="{{ user.avatar }}">
+<p>Логін: {{ user.username }}</p>
 <p>Дата створення аккаунта: {{ current_user.date.strftime("%H:%M, %b %d %Y") }}</p>
-<p>Пароль: {{ current_user.password }} ( ВИДАЛИТИ ) </p>
+
+<hr>
+
+<p>Коментарі користувача:</p>
+{% if user.comments[0] %}
+    {% for comment in user.comments %}
+        <a href="/post/{{ comment.article_id }}">{{ comment.article.title }}</a>
+        <br>
+        {{ comment.text }}
+        <br>
+        {{ comment.date.strftime("%H:%M, %b %d %Y") }}
+        <br>
+    {% endfor %}
+{% else %}
+<br>
+<p>Ми не знайшли ваші коментарі. Мабуть, тому що ви не написали ще жодного...</p>
+{% endif %}
+
 
 {% endblock %}
