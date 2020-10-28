@@ -17,11 +17,12 @@
             <a class="button" href="/home">Home</a>
             <a class="button" href="/about">About</a>
             {% if session.logged_in %}
-                <a class="button" href="/create_article">Create</a>
                 <a class="button" href="/edit_articles">Edit</a>
+                <a class="button" href="/create_article">Create</a>
                 <a class="button" href="/logout">Logout</a>
             {% else %}
                 <a class="button" href="/login">Login</a>
+                <a class="button" href="/register">Register</a>
             {% endif %}
         </div>
     </div>

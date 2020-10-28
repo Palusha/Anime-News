@@ -1,4 +1,8 @@
 .idea/
 local/
 post.db
+users.db
 __pycache__/
+comments_database.py
+posts_database.py
+users_database.py

@@ -5,10 +5,35 @@ Post page
 {% endblock %}
 
 {% block body %}
-<article>
-	<div class="center">
-		<h1>{{ article[2] }}</h1>
-	</div>
-	<h3>{{ article[3] }}</h3>
-</article>
+    <article>
+        <div class="center">
+            <h1>{{ article[2] }}</h1>
+        </div>
+        <h3>{{ article[3] }}</h3>
+    </article>
+    <h2>Коментарии: </h2>
+    {% for comment in comments %}
+        <div class="flex-contianer">
+            <div class="left-btn">
+                {{ comment[2] }}
+            </div>
+            {% if session.admin %}
+                <div class="right-btn">
+                    <a>edit</a>
+                    <a>delete</a>
+                </div>
+            {% endif %}
+        </div>
+        <p>{{ comment[3] }}</p>
+    {% endfor %}
+
+    <div>
+        <form method="POST">
+            <label>Имя:</label>
+            <input type="text" name="name" id="name" required/>
+            <label>Коментарий:</label>
+            <textarea name="text" id="text" required></textarea>
+            <button type="submit">Создать коментарий</button>
+        </form>
+    </div>
 {% endblock %}
