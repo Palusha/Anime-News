@@ -6,43 +6,71 @@
 
 {% block body %}
 
-<div class='article-info'>
-    <h1>{{ article.title }}</h1>
-    Автор статті: <a href="/profile/{{ article.user.username }}">{{ article.user.username }}</a>
-    <br>
-    Дата створення статті: {{ article.date.strftime("%H:%M, %b %d %Y") }}
-    <br>
-    {% if article.last_update %}
-    Останньо оновлено: {{ article.last_update.strftime("%H:%M, %b %d %Y") }}
-    <br>
-    {% endif %}
-    <p>{{ article.text }}</p>   
-</div>
-<div class='comment-section'>
-    <div class='comments'>
-        {% for comment in article.comments %}
+<section class="articles-module--articles">
+    <div class="title-module--banner">
+        <h1>{{ article.title }}</h1>
+        {{ article.date.strftime("%H:%M, %b %d %Y") }} by <u><a href="/profile/{{ article.user.username }}">{{ article.user.username }}</a></u>
+        {% if article.last_update %}
         <br>
-            <img style="width: 32px" src="{{ comment.user.avatar }}">
-            <a href="/profile/{{ comment.user.username }}">{{ comment.user.username }}</a>
+        Останньо оновлено: {{ article.last_update.strftime("%H:%M, %b %d %Y") }}
+        {% endif %}
+        {% if current_user.role == 1 %}
         <br>
-            {{ comment.text }}
-        <br>
-            {{ comment.date.strftime("%H:%M, %b %d %Y") }}
-        <br>
-            <a href="/delete-comment/{{ comment.id }}">Delete comment</a>
-        {% endfor %}
+        <a href="/edit-post/{{ article.id }}" style="text-decoration: underline; color: #2680c0">Редагувати статтю</a>
+        {% endif %}
     </div>
-    {% if current_user.is_authenticated %}
-    <div class='comment-form'>
-        <form method="POST" action="/create-comment/{{ article.id }}">
-            <textarea name="text" id="text"></textarea><br>
-            <button type="submit">Submit</button><br>
-        </form>
+    <div class="title-module--underline"></div>
+    <div class='single-article-module--footer' contenteditable="true" style="max-width: 1170px; margin: 0 auto 2rem;">
+        <div id="test1" contenteditable="true">
+            {{ article.text }}
+        </div>
     </div>
-    {% else %}
-    <p>Чтобы оставить комментарий вам нужно ввойти в аккаунт.</p>
-    {% endif %}
-</div>
+    <div class="title-module--underline"></div>
+</section>
+<section class="comments-module-comments">
+    <div class="leave-comment-module">
+        {% if current_user.is_authenticated %}
+        <p>Ви авторизовані як 
+            <a href="/profile/{{ current_user.username }}" style="color: #2680c0">
+                <u>{{ current_user.username }}</u>
+            </a>
+        </p>
+        <div class='comment-form'>
+            <form method="POST" action="/create-comment/{{ article.id }}">
+                <textarea name="text" id="text" placeholder="Текст коментаря" style="margin-top: 0px; margin-bottom: 5px; height: 95px; width: 100%;"></textarea><br>
+                <input class="default-button" type="submit" value="Відправити">
+            </form>
+        </div>
+        {% else %}
+        <p>Щоб залишити коментар вам потрібно <a href="/login">ввійти</a> в акаунт.</p>
+        {% endif %}
+    </div>
+    {% for comment in article.comments|reverse %}
+    <div class="single-comment-module">
+        <div class="comment">
+            <a href="/profile/{{ comment.user.username }}" class="comment-img">
+                <img src="/static/avatars/{{ comment.user.avatar }}">
+            </a>
+            <div class="comment-body">
+                <div class="comment-top">
+                    <a href="/profile/{{ comment.user.username }}" class="comment-author">{{ comment.user.username }}</a>
+                    {% if current_user.role == 1 or comment.user_id == current_user.id %}
+                    <div class="delete-comment">
+                        <a href="/delete-comment/{{ comment.id }}">Видалити коментар</a>
+                    </div>
+                    {% endif %}
+                    <div class="comment-date">
+                        {{ comment.date.strftime("%H:%M, %b %d %Y") }}
+                    </div>
+                </div>
+                <div class="comment-text">
+                    {{ comment.text }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
 
 
 {% endblock %}

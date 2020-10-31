@@ -5,10 +5,26 @@
 {% endblock %}
 
 {% block body %}
-<p class="greeting">Ты находишься на <strong>домашней</strong> странице!</p>
-
-{% for article in articles|reverse %}
-<h1 class="main-page-article"><a href="/post/{{ article.id }}">{{ article.title }}</a></h1>
-<p class="main-page-article">{{ article.text[0:70] }}... <a href="/post/{{ article.id }}">(читать дальше)</a></p>
-{% endfor %}
+<section class="articles-module--articles">
+    <div class="title-module--banner">
+        <h1>Новини</h1>
+    </div>
+    <div class="title-module--underline"></div>
+    <div class="center">
+        {% for article in articles|reverse %}
+            <a href="/post/{{ article.id }}" class="article-link">
+                <article class="single-article-module--article">
+                    <div class="img-wrapper">
+                        <img src="/static/article-thumbnails/{{ article.thumbnail }}" alt="lol" width="1280" height="720">
+                    </div>
+                    <div class="single-article-module--footer">
+                        <h4>{{ article.title[0:200] }}...</h4>
+                        <p class="tab">{{ article.date.strftime("%H:%M, %b %d %Y") }} </p>
+                        <p class="text">{{ article.text[0:317] }}...</p>
+                    </div>
+                </article>
+            </a>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

@@ -7,26 +7,30 @@
 {% block body %}
 <section class="title-module">
     <div class="title-module--banner">
-        <h1>Профіль користувача {{ user.username }}</h1>
+        <h1>Профіль</h1>
     </div>
     <div class="title-module--underline"></div>
 </section>
 <section class="user-data-module">
     <div class="single-user"></div>
         <div class="avatar-img">
-            <img src="/static/avatars/{{ user.avatar }}">
+            <img src="/static/avatars/{{ current_user.avatar }}">
         </div>
         <div class="user-data">
-            <b>Логін:</b> {{ user.username }}
+            <b>Логін:</b> {{ current_user.username }}
             <br>
             <b>Роль:</b>
-            {% if user.role == 1 %}
+            {% if current_user.role == 1 %}
             admin
             {% else %}
             user
             {% endif %}
             <br>
-            <b>Дата створення акаунта:</b> {{ user.date.strftime("%H:%M, %b %d %Y") }}
+            <b>Дата створення акаунта:</b> {{ current_user.date.strftime("%H:%M, %b %d %Y") }}
+            <br>
+            <a href="/edit-profile/" style="text-decoration: underline; color: #2680c0">Редагувати профіль</a>
+            <br>
+            <a href="/change-password/" style="text-decoration: underline; color: #2680c0">Змінити пароль</a>
         </div>
     </div>
 </section>
@@ -34,9 +38,9 @@
 
 
 <section class="comments">
-    <h1 style="text-align: center;">Коментарі користувача:</h1>
-    {% if user.comments[0] %}
-        {% for comment in user.comments %}
+    <h1 style="text-align: center;">Коментарі:</h1>
+    {% if current_user.comments[0] %}
+        {% for comment in current_user.comments|reverse %}
         <div class="single-comment-module">
             <div class="comment">
                 <a href="/profile/{{ comment.user.username }}" class="comment-img">
@@ -45,13 +49,11 @@
                 <div class="comment-body">
                     <div class="comment-top">
                         <a href="/profile/{{ comment.user.username }}" class="comment-author">
-                            {{ comment.user.username }}
+                            {{ current_user.username }}
                         </a>
-                        {% if current_user.role == 1 or comment.user_id == current_user.id %}
                         <div class="delete-comment">
                             <a href="/delete-comment/{{ comment.id }}">Видалити коментар</a>
                         </div>
-                        {% endif %}
                         <br>
                         <a class="comment-article" href="/post/{{ comment.article_id }}">
                             "{{ comment.article.text[0:30] }}..."

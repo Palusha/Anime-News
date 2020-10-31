@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +7,53 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="topnav">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        {% if current_user.is_authenticated %}
-        <a href="/create-article">Create post</a>
-        <a href="/profile/{{ current_user.username }}">Profile</a>
-        <a href="/logout">Logout</a>
-        {% else %}
-        <a href="/login">Log in</a>
-        <a href="/signup">Sign up</a>
-        {% endif %}
-    </div>
-    <div id="global">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
+    <main>
+        <nav class="navbar">
+            <div class="nav-center">
+                <div class="nav-header">
+                    <a href='/'>
+                        <img src="/static/our-logo.svg" alt="our logo" class='nav-logo'>
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li>
+                        <a class="page-link" class="page-link" href="/">Новини</a>
+                    </li>
+                    <li>
+                        <a class="page-link" href="/about">Про нас</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.role == 1 %}
+                    <li>
+                        <a class="page-link" href="/create-article">Створити пост</a>
+                    </li>
+                    <li>
+                        <a class="page-link" href="/article-table">Керування постами</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a class="page-link" href="/profile/{{ current_user.username }}">Профіль</a>
+                    </li>
+                    <li>
+                        <a class="page-link" href="/logout" style="color: var(--clr-red-dark)">Вийти</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a class="page-link" href="/login" style="color: var(--clr-red-dark)">Ввійти</a>
+                    </li>
+                    <li>
+                        <a class="page-link" href="/signup" style="color: var(--clr-red-dark)">Реєстрація</a>
+                    </li>
+                    {% endif %}
                 </ul>
-            {% endif %}
-        {% endwith %}
+            </div>
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </nav>
         {% block body %}{% endblock %}
-    </div>
+    </main>
 </body>
 </html>

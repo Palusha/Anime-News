@@ -1,8 +1,10 @@
 .vscode
 __pycache__/
 local
+env
 
 app/databases
-static/css/images
+app/static/avatars
+app/static/article-thumbnails
 
 config.py

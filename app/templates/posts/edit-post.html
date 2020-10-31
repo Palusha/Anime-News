@@ -5,13 +5,28 @@
 {% endblock %}
 
 {% block body %}
-<p class="greeting">Вы в режиме редактора</h1>
-<p class="greeting"><a href="/delete-article/{{ article.id }}"><i>УДАЛИТЬ ПОСТ</i></a></p>
-<div class="container">
-    <form method="POST">
-        <input type="text" name="title" id="title" value='{{ article.title }}'><br>
-        <textarea name="text" id="text">{{ article.text }}</textarea><br>
-        <button type="submit">Submit</button><br>
-    </form>
-</div>
+
+<section style="padding: 6rem 0;">
+    <div class="title-module--banner">
+        <h1>Режим редагування</h1>
+        <h3>
+            <a href="/delete-article/{{ article.id }}" style="color: #bb2525">
+                Видалити пост
+            </a>
+        </h3>
+    </div>
+    <div class="title-module--underline"></div>
+    <div class='single-article-module--footer' style="max-width: 1170px; margin: 0 auto 2rem; text-align: center;">
+        <div class="article-creation">
+            <form method="POST" enctype="multipart/form-data">
+                <h3>Прев'ю статті:</h3>
+                <input class="file-input" type="file" name="thumbnail" accept="image/png, image/jpeg">
+                <textarea class="title-textarea" type="text" name="title" placeholder="Заголовок статті" id="title">{{ article.title }}</textarea>
+                <textarea class="text-textarea" name="text" id="text" placeholder="Текст статті">{{ article.text }}</textarea>
+                <input class="default-button" type="submit" value="Зберегти зміни">
+            </form>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

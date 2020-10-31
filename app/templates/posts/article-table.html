@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Delete post</title>
+{% endblock %}
+
+{% block body %}
+<section style="padding: 6rem 0;">
+    <div class="title-module--banner">
+        <h2>Статті</h2>
+    </div>
+    <div class="title-module--underline"></div>
+    <div class='single-article-module--footer' style="max-width: 1170px; margin: 0 auto 2rem; text-align: center;">
+        <table class="article-table">
+            <tr>
+                <th>Заголовок</th>
+                <th>Дата</th>
+            </tr>
+            {% for article in articles|reverse %}
+            <tr>
+                <td class="title">
+                    <a href='/post/article.id'>
+                        {{ article.title[0:80] }}...
+                    </a>
+                </td>
+                <td class="date">
+                    <div>
+                        {{ article.date.strftime("%H:%M, %b %d %Y") }}
+                    </div>
+                </td>
+                <td class="edit"><a href='/edit-post/{{ article.id }}'>edit</a></td>
+                <td class="delete">
+                    <a href='/delete-article/{{ article.id }}'>
+                        delete
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</section>
+{% endblock %}
